@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "189788764982",
+    "project_id": "payroll-976ae",
+    "storage_bucket": "payroll-976ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189788764982:android:67dfe98d8ae0d5210d5197",
+        "android_client_info": {
+          "package_name": "com.example.payroll"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "189788764982-qgu0r8822kq89dafq91gh82gubkdvcge.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDE--hB0tw6vKg_V5GVMV1b_YuEn5NHLNs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "189788764982-qgu0r8822kq89dafq91gh82gubkdvcge.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
