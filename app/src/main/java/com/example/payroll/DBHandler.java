@@ -1,8 +1,11 @@
 package com.example.payroll;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
 
 public class DBHandler extends SQLiteOpenHelper {
     // below variable is for our database name.
@@ -86,6 +89,29 @@ public class DBHandler extends SQLiteOpenHelper {
         // this method is called to check if the table exists already.
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
+    }
+
+    public ArrayList<EmployeeModal> readEmployees()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursorEmployee
+                = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+
+        ArrayList<EmployeeModal> employeeModalArrayList
+                = new ArrayList<>();
+
+        if (cursorEmployee.moveToFirst()) {
+            do {
+                employeeModalArrayList.add(new EmployeeModal(
+                        cursorEmployee.getString(1),
+                        cursorEmployee.getString(4),
+                        cursorEmployee.getString(2),
+                        cursorEmployee.getInt(3)));
+            } while (cursorEmployee.moveToNext());
+        }
+        cursorEmployee.close();
+        return employeeModalArrayList;
     }
 
 }

@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
-    Button logoutBtn, addEmployeeBtn;
+    Button logoutBtn, addEmployeeBtn, viewEmployeeBtn;
     TextView textView;
     FirebaseUser user;
 
@@ -36,10 +36,11 @@ public class MainActivity extends AppCompatActivity {
         employeeContactEdit = findViewById(R.id.employeeContact);
         employeeSalaryEdit = findViewById(R.id.employeeSalary);
         addEmployeeBtn = findViewById(R.id.addEmployeeBtn);
+        viewEmployeeBtn =findViewById(R.id.viewEmployeeBtn);
 
         user = auth.getCurrentUser();
         if(user == null){
-            Intent intent = new Intent(getApplicationContext(), Login.class);
+            Intent intent = new Intent(getApplicationContext(),Login.class);
             startActivity(intent);
             finish();
         }else {
@@ -80,6 +81,14 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        viewEmployeeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, ViewEmployees.class);
+                startActivity(i);
             }
         });
 

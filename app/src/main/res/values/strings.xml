@@ -13,4 +13,5 @@
     <string name="salary">Salary</string>
     <string name="add">ADD</string>
     <string name="address_new_employee">Address New Employee</string>
+    <string name="employee_salary">Employee Salary</string>
 </resources>
