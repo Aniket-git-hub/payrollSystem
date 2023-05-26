@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -18,10 +21,11 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class Registration extends AppCompatActivity {
 
-    TextInputEditText editTextEmail, editTextPassword;
+    TextInputEditText emailEditText, passwordEditText, editTextDisplayName;
     Button registerBtn;
     TextView textview;
 
@@ -34,7 +38,7 @@ public class Registration extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
+        if (currentUser != null) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             finish();
@@ -46,11 +50,12 @@ public class Registration extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         mAuth = FirebaseAuth.getInstance();
-        editTextEmail = findViewById(R.id.email);
-        editTextPassword = findViewById(R.id.password);
+        emailEditText = findViewById(R.id.email);
+        passwordEditText = findViewById(R.id.password);
         registerBtn = findViewById(R.id.registerBtn);
         progressBar = findViewById(R.id.progressBar);
         textview = findViewById(R.id.loginNow);
+        editTextDisplayName = findViewById(R.id.displayName);
 
         textview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,43 +65,102 @@ public class Registration extends AppCompatActivity {
                 finish();
             }
         });
-        registerBtn.setOnClickListener(new View.OnClickListener() {
+
+
+        TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                String email, password;
-                email = String.valueOf(editTextEmail.getText());
-                password = String.valueOf(editTextPassword.getText());
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Do nothing
+            }
 
-                if(TextUtils.isEmpty(email)){
-                    Toast.makeText(Registration.this, "Enter Email", Toast.LENGTH_SHORT).show();
-                    return;
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Validate the input values
+                String email = emailEditText.getText().toString();
+                if (email.isEmpty()) {
+                    emailEditText.setError("Email is required");
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    emailEditText.setError("Invalid email address");
+                } else {
+                    emailEditText.setError(null);
                 }
 
-                if(TextUtils.isEmpty(password)) {
-                    Toast.makeText(Registration.this, "Enter Password", Toast.LENGTH_SHORT).show();
-                    return;
+                String password = passwordEditText.getText().toString();
+                if (password.isEmpty()) {
+                    passwordEditText.setError("Password is required");
+                } else if (password.length() < 5 || password.length() > 10) {
+                    passwordEditText.setError("Password must be between 5 and 10 characters");
+                } else {
+                    passwordEditText.setError(null);
                 }
+            }
+        };
+
+        emailEditText.addTextChangedListener(textWatcher);
+        passwordEditText.addTextChangedListener(textWatcher);
 
 
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    progressBar.setVisibility(View.GONE);
-                                    Toast.makeText(Registration.this, "Account Created.",
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
+        registerBtn.setOnClickListener(v -> {
+            // Get the input values
+            progressBar.setVisibility(View.VISIBLE);
+            String email, password, name;
+            email = String.valueOf(emailEditText.getText());
+            password = String.valueOf(passwordEditText.getText());
+            name = String.valueOf(editTextDisplayName.getText());
 
-                                    Toast.makeText(Registration.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+            // Validate the input values
+            boolean isValid = true;
+            if (email.isEmpty()) {
+                emailEditText.setError("Email is required");
+                isValid = false;
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                emailEditText.setError("Invalid email address");
+                isValid = false;
+            }
+            if (password.isEmpty()) {
+                passwordEditText.setError("Password is required");
+                isValid = false;
+            } else if (password.length() < 5 || password.length() > 10) {
+                passwordEditText.setError("Password must be between 5 and 10 characters");
+                isValid = false;
+            }
 
+            if (isValid) {
+                    mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(name).build();
+
+                            user.updateProfile(profileUpdates)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                progressBar.setVisibility(View.GONE);
+                                                Toast.makeText(Registration.this, "Account Created.", Toast.LENGTH_SHORT).show();
+                                                editTextDisplayName.setText("");
+                                                emailEditText.setText("");
+                                                passwordEditText.setText("");
+                                                Intent intent = new Intent(getApplicationContext(), Login.class);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        }
+                                    });
+                        } else {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(Registration.this, task.getException().getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
             }
         });
 

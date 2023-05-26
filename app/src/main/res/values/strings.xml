@@ -14,4 +14,13 @@
     <string name="add">ADD</string>
     <string name="address_new_employee">Address New Employee</string>
     <string name="employee_salary">Employee Salary</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="employee_phone">Employee Phone</string>
+    <string name="employee_email">Employee Email</string>
+    <string name="employee_salary_8hrs">Employee Salary /8hrs</string>
+    <string name="add_new_employee">Add New Employee</string>
+    <string name="employee_age">Employee Age</string>
+    <string name="employee_designation">Employee Designation</string>
+    <string name="employee_joining_date">Employee Joining Date</string>
 </resources>

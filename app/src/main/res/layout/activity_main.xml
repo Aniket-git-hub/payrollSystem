@@ -1,118 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/addEmployeeBtn"
-        android:layout_width="377dp"
-        android:layout_height="47dp"
-        android:layout_marginBottom="10dp"
-        android:text="@string/add"
+    <FrameLayout
+        android:id="@+id/flFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#673AB7"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/userDetails"
-        android:layout_width="211dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="80dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/logoutBtn"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="374dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="54dp"
-        android:layout_marginEnd="21dp"
-        android:text="Add New Employee"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userDetails" />
-
-    <EditText
-        android:id="@+id/employeeName"
-        android:layout_width="377dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="73dp"
-        android:layout_marginBottom="24dp"
-        android:hint="@string/employee_name"
-        app:layout_constraintBottom_toTopOf="@+id/employeeSalary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-    <EditText
-        android:id="@+id/employeeAddress"
-        android:layout_width="377dp"
-        android:layout_height="46dp"
-        android:layout_marginBottom="24dp"
-        android:hint="@string/employee_address"
-        app:layout_constraintBottom_toTopOf="@+id/employeeContact"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.486"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/employeeContact"
-        android:layout_width="377dp"
-        android:layout_height="47dp"
-        android:layout_marginBottom="244dp"
-        android:hint="@string/contact_no"
-        app:layout_constraintBottom_toTopOf="@+id/addEmployeeBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/employeeSalary"
-        android:layout_width="377dp"
-        android:layout_height="47dp"
-        android:layout_marginBottom="24dp"
-        android:hint="@string/salary"
-        app:layout_constraintBottom_toTopOf="@+id/employeeAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/logoutBtn"
-        android:layout_width="81dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/logout"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        app:layout_constraintStart_toEndOf="@+id/userDetails"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/viewEmployeeBtn"
-        android:layout_width="185dp"
-        android:layout_height="69dp"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="42dp"
-        android:layout_marginEnd="160dp"
-        android:layout_marginBottom="154dp"
-        android:background="#673AB7"
-        android:text="View Employees"
-        app:icon="@android:drawable/ic_menu_view"
-        app:iconTint="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/addEmployeeBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/employeeContact" />
-
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

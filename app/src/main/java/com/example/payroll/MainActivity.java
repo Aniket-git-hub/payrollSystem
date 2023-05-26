@@ -1,96 +1,72 @@
 package com.example.payroll;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.MenuItem;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements BottomNavigationView
+        .OnNavigationItemSelectedListener {
+
+    BottomNavigationView bottomNavigationView;
 
     FirebaseAuth auth;
-    Button logoutBtn, addEmployeeBtn, viewEmployeeBtn;
-    TextView textView;
     FirebaseUser user;
 
-    EditText employeeNameEdit, employeeAddressEdit, employeeContactEdit, employeeSalaryEdit;
-    DBHandler dbHandler;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        auth = FirebaseAuth.getInstance();
-        logoutBtn = findViewById(R.id.logoutBtn);
-        textView = findViewById(R.id.userDetails);
 
-        employeeNameEdit = findViewById(R.id.employeeName);
-        employeeAddressEdit = findViewById(R.id.employeeAddress);
-        employeeContactEdit = findViewById(R.id.employeeContact);
-        employeeSalaryEdit = findViewById(R.id.employeeSalary);
-        addEmployeeBtn = findViewById(R.id.addEmployeeBtn);
-        viewEmployeeBtn =findViewById(R.id.viewEmployeeBtn);
+        auth = FirebaseAuth.getInstance();
 
         user = auth.getCurrentUser();
         if(user == null){
             Intent intent = new Intent(getApplicationContext(),Login.class);
             startActivity(intent);
             finish();
-        }else {
-            textView.setText(user.getEmail());
         }
 
-        // Initializing the dbHandler variable
-        dbHandler = new DBHandler(MainActivity.this);
+        bottomNavigationView
+                = findViewById(R.id.bottomNavigationView);
 
-        addEmployeeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String employeeName = String.valueOf(employeeNameEdit.getText());
-                String employeeAddress = String.valueOf(employeeAddressEdit.getText());
-                String employeeContact = String.valueOf(employeeContactEdit.getText());
-                String employeeSalary = String.valueOf(employeeSalaryEdit.getText());
-
-                if(employeeName.isEmpty() && employeeAddress.isEmpty() && employeeContact.isEmpty() && employeeSalary.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "PLEASE FILL THE INPUTS", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                dbHandler.addNewEmployee(employeeName, employeeAddress, employeeContact, Integer.valueOf(employeeSalary));
-
-                Toast.makeText(MainActivity.this, "New Employee Added", Toast.LENGTH_SHORT).show();
-                employeeNameEdit.setText("");
-                employeeAddressEdit.setText("");
-                employeeContactEdit.setText("");
-                employeeSalaryEdit.setText("");
-
-            }
-        });
-
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getApplicationContext(), Login.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        viewEmployeeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, ViewEmployees.class);
-                startActivity(i);
-            }
-        });
-
+        bottomNavigationView
+                .setOnNavigationItemSelectedListener(this);
+        bottomNavigationView.setSelectedItemId(R.id.home);
     }
+    HomeFragment homeFragment = new HomeFragment();
+    EmployeeFragment employeeFragment = new EmployeeFragment();
+    SettingsFragment settingsFragment = new SettingsFragment();
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item){
+        if(item.getItemId() == R.id.employee){
+            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment, employeeFragment).commit();
+            return true;
+        } else if(item.getItemId() == R.id.home){
+            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment, homeFragment).commit();
+            return true;
+        } else if(item.getItemId() == R.id.settings){
+            getSupportFragmentManager().beginTransaction().replace(R.id.flFragment, settingsFragment).commit();
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public void logout(){
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(getApplicationContext(),Login.class);
+        startActivity(intent);
+        finish();
+    }
+
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardElevation="10dp"
+    app:cardCornerRadius="5dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="8"
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+
+            android:id="@+id/srno"
+            android:layout_marginVertical="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="#1"
+            android:textSize="15sp"
+            />
+
+        <TextView
+            android:id="@+id/employeeNameTextView"
+            android:layout_marginVertical="20dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Aniket Singh"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            />
+
+        <Button
+            android:textColor="@color/white"
+            android:background="#673AB7"
+            android:padding="0dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:textSize="15sp"
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:text="In"
+            android:id="@+id/employeeInTimeBtn"
+            />
+
+        <Button
+            android:textColor="@color/white"
+            android:background="#673AB7"
+            android:padding="0dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:textSize="15sp"
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:text="Out"
+            android:id="@+id/employeeOutTimeBtn"
+            />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

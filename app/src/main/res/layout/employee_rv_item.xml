@@ -5,14 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:elevation="8dp"
-    app:cardCornerRadius="4dp">
+    app:cardElevation="10dp"
+    app:cardCornerRadius="10dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:weightSum="6"
+        android:gravity="center_vertical"
+>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:layout_weight="5"
+        >
 
         <!--text view for our course name-->
         <TextView
@@ -20,47 +31,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="3dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
             android:text="@string/employee_name"
-            android:textColor="@color/black" />
+            />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <!--text view for our course tracks-->
-            <TextView
-                android:id="@+id/employeeContact"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="3dp"
-                android:text="@string/contact_no"
-                android:textColor="@color/black" />
-
-
-            <!--text view for our course duration-->
-            <TextView
-                android:id="@+id/employeeSalary"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="3dp"
-                android:text="@string/employee_salary"
-                android:textColor="@color/black" />
-
-        </LinearLayout>
-
-        <!--text view for our course description-->
         <TextView
-            android:id="@+id/employeeAddress"
+            android:id="@+id/employeeDesignation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="3dp"
-            android:text="@string/employee_address"
-            android:textColor="@color/black" />
+            android:textSize="15sp"
+            android:text="@string/employee_designation"
+            />
+
+    </LinearLayout>
+
 
     </LinearLayout>
 
