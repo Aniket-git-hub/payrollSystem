@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">payroll</string>
     <string name="login">Login</string>
-    <string name="email">email</string>
-    <string name="password">password</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
     <string name="register">Register</string>
     <string name="click_to_login">Click to login</string>
     <string name="click_to_register">Click to Register</string>
@@ -23,4 +23,28 @@
     <string name="employee_age">Employee Age</string>
     <string name="employee_designation">Employee Designation</string>
     <string name="employee_joining_date">Employee Joining Date</string>
+    <string name="namaste_aniket">Namaste, Aniket</string>
+    <string name="_24_may_2023">24 may 2023</string>
+    <string name="total_payment">Total Payment</string>
+    <string name="_65475">65475</string>
+    <string name="lowest_payment">Lowest</string>
+    <string name="highest_payment">Highest</string>
+    <string name="_25461">25461</string>
+    <string name="_10250">10250</string>
+    <string name="add_attendance">Add Attendance</string>
+    <string name="new_employee">New Employee</string>
+    <string name="out">Out</string>
+    <string name="in">In</string>
+    <string name="_1">#1</string>
+    <string name="aniket_singh">Aniket Singh</string>
+    <string name="employee_details">Employee Details</string>
+    <string name="age">Age:</string>
+    <string name="_21">21</string>
+    <string name="address">Address:</string>
+    <string name="from_somewhere_in_bihar">From somewhere in bihar</string>
+    <string name="phone">Phone:</string>
+    <string name="_7559410568">7559410568</string>
+    <string name="singhdharmvir81_gmail_com">singhdharmvir81@gmail.com</string>
+    <string name="desig">Desig:</string>
+    <string name="senior_developer">Senior Developer</string>
 </resources>

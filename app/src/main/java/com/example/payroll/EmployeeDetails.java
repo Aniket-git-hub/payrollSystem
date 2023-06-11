@@ -6,9 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.os.Bundle;
@@ -16,14 +14,12 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,32 +28,28 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class EmployeeDetails extends AppCompatActivity {
-
     EditText employeeNameEdit, employeeAgeEdit, employeeSalaryEdit, employeeAddressEdit, employeeEmailEdit, employeeContactEdit, employeeDesignationEdit;
     Button employeeEditToggleBtn, employeeDeleteBtn, employeeUpdateBtn, addAttendanceBtn, changeMonthBtn;
     TextView overTimeTextView, leavesTextView, paymentTextView;
     Boolean editingEnabled = false;
-
+    String rupeeSign = "\u20B9";
     TableLayout employeeAttendanceTable;
-
     FirebaseAuth auth;
-
     DBHandler dbHandler;
-    Calendar calendar;
+    Calendar calendar = Calendar.getInstance();
 
-
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "SimpleDateFormat"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_details);
-        calendar = Calendar.getInstance();
 
         auth = FirebaseAuth.getInstance();
 
-        dbHandler = new DBHandler(EmployeeDetails.this, auth.getCurrentUser().getEmail());
+        dbHandler = new DBHandler(EmployeeDetails.this, Objects.requireNonNull(auth.getCurrentUser()).getEmail());
 
         Intent intent = getIntent();
         String employeeId = intent.getStringExtra("id");
@@ -133,25 +125,33 @@ public class EmployeeDetails extends AppCompatActivity {
         });
 
         employeeUpdateBtn.setOnClickListener(v -> {
-
-            dbHandler.updateEmployee(Integer.parseInt(employeeId), String.valueOf(employeeNameEdit.getText()), Integer.parseInt(String.valueOf(employeeAgeEdit.getText())), String.valueOf(employeeAddressEdit.getText()), String.valueOf(employeeContactEdit.getText()), String.valueOf(employeeEmailEdit.getText()), String.valueOf(employeeDesignationEdit.getText()), Integer.parseInt(String.valueOf(employeeSalaryEdit.getText())));
-
+            dbHandler.updateEmployee(
+                    Integer.parseInt(employeeId),
+                    String.valueOf(employeeNameEdit.getText()),
+                    Integer.parseInt(String.valueOf(employeeAgeEdit.getText())),
+                    String.valueOf(employeeAddressEdit.getText()),
+                    String.valueOf(employeeContactEdit.getText()),
+                    String.valueOf(employeeEmailEdit.getText()),
+                    String.valueOf(employeeDesignationEdit.getText()),
+                    Integer.parseInt(String.valueOf(employeeSalaryEdit.getText()))
+            );
             Toast.makeText(EmployeeDetails.this, "Employee Details Successfully Updated ", Toast.LENGTH_SHORT).show();
-
             employeeEditToggleBtn.performClick();
-
         });
 
-        employeeDeleteBtn.setOnClickListener(v -> new AlertDialog.Builder(EmployeeDetails.this).setTitle("Delete Employee").setMessage("Are you sure you want to delete this employee?").setPositiveButton(android.R.string.yes, (dialog, which) -> {
-            dbHandler.deleteEmployee(Integer.parseInt(employeeId));
-            Toast.makeText(EmployeeDetails.this, "Employee Deleted", Toast.LENGTH_SHORT).show();
-            finish();
-        }).setNegativeButton(android.R.string.no, null).setIcon(android.R.drawable.ic_dialog_alert).show());
-
+        employeeDeleteBtn.setOnClickListener(v ->
+                new AlertDialog.Builder(EmployeeDetails.this)
+                        .setTitle("Delete Employee")
+                        .setMessage("Are you sure you want to delete this employee?")
+                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                            dbHandler.deleteEmployee(Integer.parseInt(employeeId));
+                            Toast.makeText(EmployeeDetails.this, "Employee Deleted", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }).setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert).show()
+        );
 
         addAttendanceBtn.setOnClickListener(v -> {
-
-            Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -193,6 +193,7 @@ public class EmployeeDetails extends AppCompatActivity {
                 // Show a DatePickerDialog to select the date
                 new DatePickerDialog(EmployeeDetails.this, (view, year1, month1, dayOfMonth) -> {
                     // Update the dateTextView with the selected date
+                    @SuppressLint("DefaultLocale")
                     String date = String.format("%04d-%02d-%02d", year1, month1 + 1, dayOfMonth);
                     dateTextView.setText("Date: " + date);
                 }, year, month, day
@@ -200,77 +201,77 @@ public class EmployeeDetails extends AppCompatActivity {
             });
             layout.addView(selectDateButton);
 
-            // Add a TextView to display the selected intime
-            final TextView intimeTextView = new TextView(this);
-            intimeTextView.setText("Intime: ");
-            intimeTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-            layout.addView(intimeTextView);
+            // Add a TextView to display the selected inTime
+            final TextView inTimeTextView = new TextView(this);
+            inTimeTextView.setText("In Time: ");
+            inTimeTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+            layout.addView(inTimeTextView);
 
-            // Add a Button to select the intime
-            Button selectIntimeButton = new Button(this);
-            selectIntimeButton.setText("Select Intime");
-            selectIntimeButton.setLayoutParams(params);
-            selectIntimeButton.setOnClickListener(v1 -> {
-                // Show a TimePickerDialog to select the intime
+            // Add a Button to select the inTime
+            Button selectInTimeButton = new Button(this);
+            selectInTimeButton.setText("Select In Time");
+            selectInTimeButton.setLayoutParams(params);
+            selectInTimeButton.setOnClickListener(v1 -> {
+                // Show a TimePickerDialog to select the inTime
                 new TimePickerDialog(EmployeeDetails.this, (view, hourOfDay, minute12) -> {
-                    // Update the intimeTextView with the selected time
-                    String intime = String.format("%02d:%02d:00", hourOfDay, minute12);
-                    intimeTextView.setText("Intime: " + intime);
+                    // Update the inTimeTextView with the selected time
+                    @SuppressLint("DefaultLocale")
+                    String inTime = String.format("%02d:%02d:00", hourOfDay, minute12);
+                    inTimeTextView.setText("In Time: " + inTime);
                 }, hour, minute, false // Replace with the current time
                 ).show();
             });
             // Set the button's background color
-            selectIntimeButton.setBackgroundColor(Color.parseColor("#673AB7"));
-            selectIntimeButton.setTextColor(Color.parseColor("#FFFFFF"));
-            layout.addView(selectIntimeButton);
+            selectInTimeButton.setBackgroundColor(Color.parseColor("#673AB7"));
+            selectInTimeButton.setTextColor(Color.parseColor("#FFFFFF"));
+            layout.addView(selectInTimeButton);
 
-            // Add a TextView to display the selected outtime
-            final TextView outtimeTextView = new TextView(this);
-            outtimeTextView.setText("Outtime: ");
-            outtimeTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-            layout.addView(outtimeTextView);
+            // Add a TextView to display the selected outTime
+            final TextView outTimeTextView = new TextView(this);
+            outTimeTextView.setText("Out Time: ");
+            outTimeTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+            layout.addView(outTimeTextView);
 
-            // Add a Button to select the outtime
-            Button selectOuttimeButton = new Button(this);
-            selectOuttimeButton.setText("Select Outtime");
-            selectOuttimeButton.setLayoutParams(params);
-            selectOuttimeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Show a TimePickerDialog to select the outtime
-                    new TimePickerDialog(EmployeeDetails.this, (view, hourOfDay, minute1) -> {
-                        // Update the outtimeTextView with the selected time
-                        String outtime = String.format("%02d:%02d:00", hourOfDay, minute1);
-                        outtimeTextView.setText("Outtime: " + outtime);
-                    }, hour, minute, false
-                    ).show();
-                }
+            // Add a Button to select the outTime
+            Button selectOutTimeButton = new Button(this);
+            selectOutTimeButton.setText("Select Out Time");
+            selectOutTimeButton.setLayoutParams(params);
+            selectOutTimeButton.setOnClickListener(v13 -> {
+                // Show a TimePickerDialog to select the outTime
+                new TimePickerDialog(EmployeeDetails.this, (view, hourOfDay, minute1) -> {
+                    // Update the outTimeTextView with the selected time
+                    @SuppressLint("DefaultLocale")
+                    String outTime = String.format("%02d:%02d:00", hourOfDay, minute1);
+                    outTimeTextView.setText("Out Time: " + outTime);
+                }, hour, minute, false
+                ).show();
             });
             // Set the button's background color
-            selectOuttimeButton.setBackgroundColor(Color.parseColor("#673AB7"));
-            selectOuttimeButton.setTextColor(Color.parseColor("#FFFFFF"));
-            layout.addView(selectOuttimeButton);
+            selectOutTimeButton.setBackgroundColor(Color.parseColor("#673AB7"));
+            selectOutTimeButton.setTextColor(Color.parseColor("#FFFFFF"));
+            layout.addView(selectOutTimeButton);
 
             // Create the dialog
-            new AlertDialog.Builder(this).setTitle("Add Attendance").setView(layout).setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                // User clicked the OK button
-                // Get the selected date, intime and outtime from the TextViews
-                String date = dateTextView.getText().toString().substring(6);
-                String intime = intimeTextView.getText().toString().substring(8);
-                String outtime = outtimeTextView.getText().toString().substring(9);
+            new AlertDialog.Builder(this)
+                    .setTitle("Add Attendance")
+                    .setView(layout)
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                        // User clicked the OK button
+                        // Get the selected date, inTime and outTime from the TextViews
+                        String date = dateTextView.getText().toString().substring(6);
+                        String inTime = inTimeTextView.getText().toString().substring(8);
+                        String outTime = outTimeTextView.getText().toString().substring(9);
 
-                // Calling the addAttendance method to add or update the attendance record
-                dbHandler.addAttendance(Integer.parseInt(employeeId), date, intime, outtime);
-                Toast.makeText(EmployeeDetails.this, "Successfully Added", Toast.LENGTH_SHORT).show();
-            }).setNegativeButton(android.R.string.cancel, null).show();
-
-
+                        // Calling the addAttendance method to add or update the attendance record
+                        dbHandler.addAttendance(Integer.parseInt(employeeId), date, inTime, outTime);
+                        Toast.makeText(EmployeeDetails.this, "Successfully Added", Toast.LENGTH_SHORT).show();
+                    }).setNegativeButton(android.R.string.cancel, null).show();
         });
 
+        changeMonthBtn.setText(
+                new SimpleDateFormat("MMMM yyyy").format(calendar.getTime())
+        );
         changeMonthBtn.setOnClickListener(v -> {
-
-            // Get the current date
-            Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
 
@@ -285,7 +286,7 @@ public class EmployeeDetails extends AppCompatActivity {
             monthPicker.setMinValue(0);
             monthPicker.setMaxValue(11);
             monthPicker.setValue(month);
-            monthPicker.setDisplayedValues(new String[] {
+            monthPicker.setDisplayedValues(new String[]{
                     "January", "February", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"
             });
@@ -302,51 +303,81 @@ public class EmployeeDetails extends AppCompatActivity {
             new AlertDialog.Builder(EmployeeDetails.this)
                     .setTitle("Select Month")
                     .setView(layout)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // User clicked the OK button
-                            // Get the selected month and year
-                            int selectedMonth = monthPicker.getValue();
-                            int selectedYear = yearPicker.getValue();
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                        // User clicked the OK button
+                        // Get the selected month and year
+                        int selectedMonth = monthPicker.getValue();
+                        int selectedYear = yearPicker.getValue();
 
-                            // Format the selected month and year as "MMMM yyyy"
-                            calendar.set(selectedYear, selectedMonth, 1);
-                            String monthYear = new SimpleDateFormat("MMMM yyyy").format(calendar.getTime());
-                            String monthYearForDB = new SimpleDateFormat("yyyy-MM").format(calendar.getTime());
+                        // Format the selected month and year as "MMMM yyyy"
+                        calendar.set(selectedYear, selectedMonth, 1);
+                        @SuppressLint("SimpleDateFormat")
+                        String monthYear = new SimpleDateFormat("MMMM yyyy").format(calendar.getTime());
+                        @SuppressLint("SimpleDateFormat")
+                        String monthYearForDB = new SimpleDateFormat("yyyy-MM").format(calendar.getTime());
 
-                            // Set the text of the selectMonthButton to the selected month and year
-                            changeMonthBtn.setText(monthYear);
+                        // Set the text of the selectMonthButton to the selected month and year
+                        changeMonthBtn.setText(monthYear);
 
-                            // add code for getting current month data here
-                            reloadDateMonthChanged(Integer.parseInt(employeeId),monthYearForDB );
-
+                        // add code for getting current month data here
+                        try {
+                            reloadDateMonthChanged(Integer.parseInt(employeeId), monthYearForDB);
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
                         }
+
                     })
                     .setNegativeButton(android.R.string.cancel, null)
                     .show();
-
         });
 
+        @SuppressLint("SimpleDateFormat")
         String currentMonth = new SimpleDateFormat("yyyy-MM").format(new Date());
 
+        leavesTextView.setText(
+                String.valueOf(dbHandler.getMissingAttendanceCountInCurrentMonth(
+                            Integer.parseInt(employeeId),
+                            currentMonth,
+                            Calendar.THURSDAY
+                        )
+                )
+        );
+        overTimeTextView.setText(
+                String.valueOf(dbHandler.getOvertimeInCurrentMonth(
+                            Integer.parseInt(employeeId),
+                            currentMonth
+                        )
+                )
+        );
+        paymentTextView.setText(
+                rupeeSign + dbHandler.getPaymentInCurrentMonth(
+                        Integer.parseInt(employeeId),
+                        currentMonth)
+        );
 
-        leavesTextView.setText(String.valueOf(dbHandler.getMissingAttendanceCountInCurrentMonth(Integer.parseInt(employeeId), currentMonth, calendar.THURSDAY)));
-        overTimeTextView.setText(String.valueOf(dbHandler.getOvertimeInCurrentMonth(Integer.parseInt(employeeId), currentMonth)));
-        paymentTextView.setText("\u20B9" + dbHandler.getPaymentInCurrentMonth(Integer.parseInt(employeeId), currentMonth));
-
-        updateAttendanceTable(employeeAttendanceTable, dbHandler.getAttendanceForCurrentMonth(Integer.parseInt(employeeId), currentMonth));
+        try {
+            updateAttendanceTable(
+                    employeeAttendanceTable,
+                    dbHandler.getAttendanceForCurrentMonth(
+                            Integer.parseInt(employeeId),
+                            currentMonth
+                    )
+            );
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
     @SuppressLint("SetTextI18n")
-    private void reloadDateMonthChanged(int employeeId, String monthYear){
-        leavesTextView.setText(String.valueOf(dbHandler.getMissingAttendanceCountInCurrentMonth(employeeId, monthYear, calendar.THURSDAY)));
+    private void reloadDateMonthChanged(int employeeId, String monthYear) throws ParseException {
+        leavesTextView.setText(String.valueOf(dbHandler.getMissingAttendanceCountInCurrentMonth(employeeId, monthYear, Calendar.THURSDAY)));
         overTimeTextView.setText(String.valueOf(dbHandler.getOvertimeInCurrentMonth(employeeId, monthYear)));
-        paymentTextView.setText("\u20B9" + dbHandler.getPaymentInCurrentMonth(employeeId, monthYear));
+        paymentTextView.setText(rupeeSign + dbHandler.getPaymentInCurrentMonth(employeeId, monthYear));
         updateAttendanceTable(employeeAttendanceTable, dbHandler.getAttendanceForCurrentMonth(employeeId, monthYear));
     }
 
-    private void updateAttendanceTable(TableLayout tableLayout, List<AttendanceModal> attendanceList){
+    private void updateAttendanceTable(TableLayout tableLayout, List<AttendanceModal> attendanceList) throws ParseException {
         // Remove all rows except the first row (header row) from the table layout
         if (tableLayout.getChildCount() > 1) {
             tableLayout.removeViews(1, tableLayout.getChildCount() - 1);
@@ -364,7 +395,7 @@ public class EmployeeDetails extends AppCompatActivity {
             serialNoTextView.setText(String.valueOf(i + 1));
             serialNoTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
             serialNoTextView.setGravity(Gravity.CENTER);
-            serialNoTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+            serialNoTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
             row.addView(serialNoTextView);
 
             TextView dateTextView = new TextView(this);
@@ -375,36 +406,28 @@ public class EmployeeDetails extends AppCompatActivity {
             }
             dateTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2f));
             dateTextView.setGravity(Gravity.CENTER);
-            dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+            dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
             row.addView(dateTextView);
 
-            TextView intimeTextView = new TextView(this);
-            try {
-                intimeTextView.setText(attendance.getIntime());
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-            intimeTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2f));
-            intimeTextView.setGravity(Gravity.CENTER);
-            intimeTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
-            row.addView(intimeTextView);
+            TextView inTimeTextView = new TextView(this);
+            inTimeTextView.setText(attendance.getIntime());
+            inTimeTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2f));
+            inTimeTextView.setGravity(Gravity.CENTER);
+            inTimeTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+            row.addView(inTimeTextView);
 
-            TextView outtimeTextView = new TextView(this);
-            try {
-                outtimeTextView.setText(attendance.getOuttime());
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-            outtimeTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2f));
-            outtimeTextView.setGravity(Gravity.CENTER);
-            outtimeTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
-            row.addView(outtimeTextView);
+            TextView outTimeTextView = new TextView(this);
+            outTimeTextView.setText(attendance.getOuttime());
+            outTimeTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2f));
+            outTimeTextView.setGravity(Gravity.CENTER);
+            outTimeTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+            row.addView(outTimeTextView);
 
             TextView hoursTextView = new TextView(this);
             hoursTextView.setText(String.valueOf(attendance.getHours()));
             hoursTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2f));
             hoursTextView.setGravity(Gravity.CENTER);
-            hoursTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+            hoursTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
             row.addView(hoursTextView);
 
             tableLayout.addView(row);

@@ -20,15 +20,18 @@
 
     <Button
         android:id="@+id/logoutBtn"
-        android:layout_margin="20dp"
-        android:layout_below="@+id/settingsTitleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="135dp"
-        android:drawableEnd="@drawable/logout"
-        android:textColor="@color/white"
+        android:layout_below="@+id/settingsTitleTextView"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:background="#673AB7"
-        android:text="Logout" />
+        android:drawableEnd="@drawable/logout"
+        android:paddingHorizontal="20dp"
+        android:text="Logout"
+        android:textColor="@color/white" />
 
 
 </RelativeLayout>

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.icu.util.Calendar;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,8 +41,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static String getDatabaseName(String email) {
         String[] emailParts = email.split("@");
-        String databaseName = emailParts[0] + "Database" + DB_NAME;
-        return databaseName;
+        return emailParts[0] + "Database" + DB_NAME;
     }
 
     @Override
@@ -106,6 +106,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public ArrayList<EmployeeModal> readEmployees() {
         SQLiteDatabase db = this.getReadableDatabase();
 
+        @SuppressLint("SimpleDateFormat")
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = dateFormat.format(new Date());
 
@@ -113,8 +114,6 @@ public class DBHandler extends SQLiteOpenHelper {
         Cursor cursorEmployee = db.rawQuery(query, new String[]{currentDate});
 
         ArrayList<EmployeeModal> employeeModalArrayList = new ArrayList<>();
-
-
 
         if (cursorEmployee.moveToFirst()) {
             do {
@@ -138,7 +137,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return employeeModalArrayList;
     }
 
-
     public void updateEmployee(int id, String name, int age, String address, String phone, String email, String designation, int salary) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -154,7 +152,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.update(TABLE_EMPLOYEE, values, ID_COL + "=?", new String[]{String.valueOf(id)});
         db.close();
     }
-
 
     public boolean addIntime(int employeeId, String date, String intime) {
         // Check if a record for the given date already exists
@@ -205,7 +202,6 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
-
     public List<AttendanceModal> getAttendanceForCurrentMonth(int employeeId, String currentMonthYear) {
         List<AttendanceModal> attendanceList = new ArrayList<>();
         String[] dateParts = currentMonthYear.split("-");
@@ -230,8 +226,18 @@ public class DBHandler extends SQLiteOpenHelper {
                 AttendanceModal attendance = new AttendanceModal();
                 attendance.setEmployeeId(Integer.parseInt(cursor.getString(0)));
                 attendance.setDate(cursor.getString(1));
-                attendance.setIntime(cursor.getString(2));
-                attendance.setOuttime(cursor.getString(3));
+                String intime = cursor.getString(2);
+                String outtime = cursor.getString(3);
+                if (intime == null || intime.isEmpty()) {
+                    attendance.setIntime("");
+                } else {
+                    attendance.setIntime(formatTime(intime));
+                }
+                if (outtime == null || outtime.isEmpty()) {
+                    attendance.setOuttime("");
+                } else {
+                    attendance.setOuttime(formatTime(outtime));
+                }
                 attendance.setHours(cursor.getDouble(4));
                 attendanceList.add(attendance);
             } while (cursor.moveToNext());
@@ -241,6 +247,19 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return attendanceList;
     }
+
+    private String formatTime(String time) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm a");
+        try {
+            Date date = inputFormat.parse(time);
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
 
     public List<AttendanceModal> getAllAttendanceForEmployee(int employeeId) {
         List<AttendanceModal> attendanceList = new ArrayList<>();
@@ -295,7 +314,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return missingCount;
     }
 
-
     public double getOvertimeInCurrentMonth(int employeeId, String currentMonth) {
         int overtime = 0;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -311,7 +329,6 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.close();
         return Math.round((overtime / 3600.0) * 100.0) / 100.0;
     }
-
 
     public double getPaymentInCurrentMonth(int employeeId, String currentMonth) {
         double payment = 0;
@@ -341,8 +358,6 @@ public class DBHandler extends SQLiteOpenHelper {
         salaryCursor.close();
         return Math.round(payment * 100.0) / 100.0;
     }
-
-
 
     public double getTotalPaymentInCurrentMonth() {
         @SuppressLint("SimpleDateFormat")
@@ -424,8 +439,12 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(ID_COL, employeeId);
         values.put(DATE_COL, date);
-        values.put(IN_TIME_COL, intime);
-        values.put(OUT_TIME_COL, outtime);
+        if (!intime.isEmpty()) {
+            values.put(IN_TIME_COL, intime);
+        }
+        if (!outtime.isEmpty()) {
+            values.put(OUT_TIME_COL, outtime);
+        }
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -447,6 +466,5 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.close();
         db.close();
     }
-
 
 }

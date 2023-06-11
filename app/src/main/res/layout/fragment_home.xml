@@ -18,9 +18,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="Namaste, Aniket"
+            android:text="@string/namaste_aniket"
             android:textColor="#000000"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
@@ -31,8 +31,8 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="24 may 2023"
-            android:textSize="20sp"
+            android:text="@string/_24_may_2023"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
         <androidx.cardview.widget.CardView
@@ -56,8 +56,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:gravity="center"
-                    android:text="65475"
-                    android:textSize="35dp"
+                    android:text="@string/_65475"
+                    android:textSize="35sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -66,8 +66,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:gravity="center"
-                    android:text="Total Payment"
-                    android:textSize="20dp" />
+                    android:text="@string/total_payment"
+                    android:textSize="15sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -77,13 +77,15 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/toBePaidCard"
             android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="2">
 
 
             <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="20dp"
+                android:layout_weight="1"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp">
 
@@ -97,26 +99,29 @@
 
                     <TextView
                         android:id="@+id/textView4"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Highest Payment"
-                        android:textSize="15dp" />
+                        android:gravity="center"
+                        android:text="@string/highest_payment"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/highestPaymentInCurrentMonth"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="25461"
-                        android:textSize="20dp"
+                        android:gravity="center"
+                        android:text="@string/_25461"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="20dp"
+                android:layout_weight="1"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="10dp">
 
@@ -129,17 +134,19 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Lowest Payment"
-                        android:textSize="15dp" />
+                        android:gravity="center"
+                        android:text="@string/lowest_payment"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/lowestPaymentInCurrentMonth"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="10250"
-                        android:textSize="20dp"
+                        android:gravity="center"
+                        android:text="@string/_10250"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -155,11 +162,11 @@
             android:layout_below="@+id/midSection"
             android:layout_centerHorizontal="true"
             android:background="#673AB7"
-            android:drawableLeft="@drawable/add"
+            android:drawableStart="@drawable/add"
             android:drawablePadding="10dp"
             android:padding="10dp"
             android:paddingHorizontal="20dp"
-            android:text="New Employee"
+            android:text="@string/new_employee"
             android:textColor="@color/white" />
 
         <TextView
@@ -167,10 +174,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/addNewEmployeeActivityLinkBtn"
-            android:layout_margin="20dp"
-            android:text="Add Attendance"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="@string/add_attendance"
             android:textAllCaps="true"
-            android:textSize="20dp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
 
@@ -179,7 +189,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/addAttendanceTextView"
-            android:layout_marginHorizontal="20dp" />
+            />
 
     </RelativeLayout>
 </ScrollView>

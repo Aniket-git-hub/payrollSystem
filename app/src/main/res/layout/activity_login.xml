@@ -5,13 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:padding="15dp"
     tools:context=".Login">
 
     <androidx.cardview.widget.CardView
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="20dp">
 
@@ -28,31 +27,55 @@
                 android:layout_marginBottom="20dp"
                 android:gravity="center"
                 android:text="@string/login"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/email"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:hint="@string/email" />
+                    android:drawableStart="@drawable/email"
+                    android:drawablePadding="10dp"
+                    android:textSize="15sp"
+                    android:hint="@string/email"
+
+                     />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/password"
-                    android:layout_width="350dp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/password"
+                        android:layout_width="350dp"
+                        android:drawableStart="@drawable/password"
+                        android:drawablePadding="10dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:inputType="textPassword"
+                        android:hint="@string/password" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <ImageView
+                    android:id="@+id/togglePasswordVisibility"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/password" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginEnd="10dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:src="@drawable/ic_eye" />
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/forgetPassword"
@@ -73,6 +96,7 @@
                 android:layout_width="195dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:textSize="15sp"
                 android:background="#673AB7"
                 android:text="@string/login"
                 android:textColor="@color/white" />

@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
+        android:layout_margin="10dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="20dp"
         >
@@ -31,7 +31,7 @@
                 android:gravity="center"
                 android:text="@string/register"
                 android:textStyle="bold"
-                android:textSize="30sp" />
+                android:textSize="20sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="wrap_content"
@@ -42,7 +42,11 @@
                     android:layout_width="377dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:hint="Name" />
+                    android:hint="Name"
+                    android:drawableStart="@drawable/person"
+                    android:drawablePadding="10dp"
+                    android:textSize="15sp"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -54,19 +58,41 @@
                     android:layout_width="377dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:hint="@string/email" />
+                    android:hint="@string/email"
+                    android:drawableStart="@drawable/email"
+                    android:drawablePadding="10dp"
+                    android:textSize="15sp"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/password"
-                    android:layout_width="378dp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/password"
+                        android:layout_width="378dp"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/password"
+                        android:drawableStart="@drawable/password"
+                        android:drawablePadding="10dp"
+                        android:inputType="textPassword"
+                        android:textSize="15sp"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/togglePasswordVisibility"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="@string/password" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginEnd="10dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:src="@drawable/ic_eye" />
+            </FrameLayout>
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -78,8 +104,9 @@
                 android:id="@+id/registerBtn"
                 android:layout_width="195dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:background="#673AB7"
+                android:layout_marginTop="20dp"
+                android:background="@color/purple"
+                android:textSize="15sp"
                 android:text="@string/register"
                 android:textColor="@color/white" />
 

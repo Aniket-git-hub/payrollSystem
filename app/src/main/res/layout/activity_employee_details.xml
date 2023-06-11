@@ -23,9 +23,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:text="Employee Details"
+                android:text="@string/employee_details"
                 android:textColor="@color/black"
-                android:textSize="25dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <Button
@@ -60,7 +60,8 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
-            android:weightSum="4">
+            android:weightSum="4"
+            >
 
             <TextView
                 android:layout_width="0dp"
@@ -68,7 +69,8 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:text="Name:"
-                android:textSize="20sp" />
+                android:textSize="15sp"
+                />
 
             <EditText
                 android:id="@+id/employeeName"
@@ -76,9 +78,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:inputType="text"
-                android:text="Aniket Singh"
-                android:textSize="20sp"
-
+                android:text="@string/aniket_singh"
+                android:textSize="15sp"
                 />
 
         </LinearLayout>
@@ -97,8 +98,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:text="Age:"
-                android:textSize="20sp" />
+                android:text="@string/age"
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/employeeAge"
@@ -106,8 +107,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:inputType="number"
-                android:text="21"
-                android:textSize="20sp" />
+                android:text="@string/_21"
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -125,8 +126,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:text="Address:"
-                android:textSize="20sp" />
+                android:text="@string/address"
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/employeeAddress"
@@ -134,8 +135,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:inputType="textMultiLine"
-                android:text="From somewhere in bihar"
-                android:textSize="20sp" />
+                android:text="@string/from_somewhere_in_bihar"
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -153,8 +154,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:text="Phone:"
-                android:textSize="20sp" />
+                android:text="@string/phone"
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/employeeContact"
@@ -162,8 +163,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:inputType="phone"
-                android:text="7559410568"
-                android:textSize="20sp" />
+                android:text="@string/_7559410568"
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -182,7 +183,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:text="Email:"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/employeeEmail"
@@ -190,8 +191,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:inputType="textEmailAddress"
-                android:text="singhdharmvir81@gmail.com"
-                android:textSize="20sp" />
+                android:text="@string/singhdharmvir81_gmail_com"
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -209,8 +210,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:text="Desig:"
-                android:textSize="20sp" />
+                android:text="@string/desig"
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/employeeDesignation"
@@ -218,8 +219,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:inputType="text"
-                android:text="Senior Developer"
-                android:textSize="20sp" />
+                android:text="@string/senior_developer"
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -238,7 +239,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:text="Salary:"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/employeeSalary"
@@ -247,7 +248,7 @@
                 android:layout_weight="3"
                 android:inputType="number"
                 android:text="1500"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -258,6 +259,7 @@
             android:layout_below="@+id/employeeSalaryLayout"
             android:layout_centerHorizontal="true"
             android:background="#673AB7"
+            android:textSize="15sp"
             android:text="Update"
             android:textColor="@color/white" />
 
@@ -276,6 +278,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="May 2023"
+                android:textSize="15sp"
                 android:background="#673AB7"
                 android:textColor="@color/white"
                 android:id="@+id/changeMonthBtn"
@@ -286,6 +289,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add Attendance"
+                android:textSize="15sp"
                 android:background="#673AB7"
                 android:textColor="@color/white"
                 android:id="@+id/addAttendanceBtn"
@@ -322,7 +326,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="305 hrs"
-                        android:textSize="25sp"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -354,7 +358,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="5 days"
-                        android:textSize="25sp"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -386,7 +390,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="60000rs"
-                        android:textSize="25sp"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -412,8 +416,8 @@
             android:paddingVertical="8dp"
             android:text="Attendance For Current Month"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="15sp"
+             />
 
         <TableLayout
             android:id="@+id/employeeAttendanceTable"
@@ -437,7 +441,7 @@
                     android:gravity="center"
                     android:text="#"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -447,7 +451,7 @@
                     android:gravity="center"
                     android:text="Date"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:textStyle="bold"
 
                     />
@@ -459,7 +463,7 @@
                     android:gravity="center"
                     android:text="In"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -469,7 +473,7 @@
                     android:gravity="center"
                     android:text="Out"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -479,7 +483,7 @@
                     android:gravity="center"
                     android:text="Hours"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
             </TableRow>
         </TableLayout>

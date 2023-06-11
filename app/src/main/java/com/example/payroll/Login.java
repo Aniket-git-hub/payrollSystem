@@ -16,6 +16,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -29,9 +30,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 public class Login extends AppCompatActivity {
 
     TextInputEditText emailEditText, passwordEditText;
+    ImageView togglePasswordVisibility;
     TextView forgetPasswordTextView;
     Button loginBtn;
     TextView textview;
@@ -61,6 +65,18 @@ public class Login extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         textview = findViewById(R.id.registerNow);
         forgetPasswordTextView = findViewById(R.id.forgetPassword);
+        togglePasswordVisibility = findViewById(R.id.togglePasswordVisibility);
+
+        togglePasswordVisibility.setOnClickListener(v -> {
+            if (passwordEditText.getInputType() == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
+                passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                togglePasswordVisibility.setImageResource(R.drawable.ic_eye);
+            } else {
+                passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                togglePasswordVisibility.setImageResource(R.drawable.ic_eye_closed);
+            }
+            passwordEditText.setSelection(Objects.requireNonNull(passwordEditText.getText()).length());
+        });
 
         textview.setOnClickListener(new View.OnClickListener() {
             @Override

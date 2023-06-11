@@ -1,5 +1,6 @@
 package com.example.payroll;
 
+import android.annotation.SuppressLint;
 import android.icu.text.SimpleDateFormat;
 
 import java.text.ParseException;
@@ -32,6 +33,7 @@ public class AttendanceModal {
     }
 
     public String getDate() throws ParseException {
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date d = sdf.parse(date);
         sdf.applyPattern("dd/MM/yy");
@@ -43,7 +45,12 @@ public class AttendanceModal {
     }
 
     public String getIntime() throws ParseException {
+        if (intime.isEmpty()) {
+            return "";
+        }
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat inputFormat = new SimpleDateFormat("HH:mm:ss");
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm a");
         Date date = inputFormat.parse(intime);
         return outputFormat.format(date);
@@ -54,7 +61,12 @@ public class AttendanceModal {
     }
 
     public String getOuttime() throws ParseException {
+        if (outtime.isEmpty()) {
+            return "";
+        }
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat inputFormat = new SimpleDateFormat("HH:mm:ss");
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm a");
         Date date = inputFormat.parse(outtime);
         return outputFormat.format(date);

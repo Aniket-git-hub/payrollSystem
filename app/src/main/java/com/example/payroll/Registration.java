@@ -4,13 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,9 +26,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import java.util.Objects;
+
 public class Registration extends AppCompatActivity {
 
     TextInputEditText emailEditText, passwordEditText, editTextDisplayName;
+    ImageView togglePasswordVisibility;
     Button registerBtn;
     TextView textview;
 
@@ -56,6 +62,18 @@ public class Registration extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         textview = findViewById(R.id.loginNow);
         editTextDisplayName = findViewById(R.id.displayName);
+        togglePasswordVisibility = findViewById(R.id.togglePasswordVisibility);
+
+        togglePasswordVisibility.setOnClickListener(v -> {
+            if (passwordEditText.getInputType() == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
+                passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                togglePasswordVisibility.setImageResource(R.drawable.ic_eye);
+            } else {
+                passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                togglePasswordVisibility.setImageResource(R.drawable.ic_eye_closed);
+            }
+            passwordEditText.setSelection(Objects.requireNonNull(passwordEditText.getText()).length());
+        });
 
         textview.setOnClickListener(new View.OnClickListener() {
             @Override

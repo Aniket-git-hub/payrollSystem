@@ -11,10 +11,13 @@
         android:id="@+id/allEmployeesTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:layout_margin="20dp"
-        android:textStyle="bold"
-        android:text="All Employees" />
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="All Employees"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <ScrollView
         android:layout_below="@+id/allEmployeesTextView"
@@ -24,10 +27,9 @@
         tools:layout_editor_absoluteY="-127dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginHorizontal="20dp"
             android:id="@+id/idRVEmployees"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
 
     </ScrollView>
 
