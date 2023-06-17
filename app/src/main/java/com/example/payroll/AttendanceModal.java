@@ -9,18 +9,19 @@ import java.util.Date;
 public class AttendanceModal {
     private int employeeId;
     private String date;
-    private String intime;
-    private String outtime;
+    private String inTime;
+    private String outTime;
     private double hours;
 
-    public AttendanceModal(){
+    public AttendanceModal() {
 
     }
-    public AttendanceModal(int employeeId, String date, String intime, String outtime, double hours) {
+
+    public AttendanceModal(int employeeId, String date, String inTime, String outTime, double hours) {
         this.employeeId = employeeId;
         this.date = date;
-        this.intime = intime;
-        this.outtime = outtime;
+        this.inTime = inTime;
+        this.outTime = outTime;
         this.hours = hours;
     }
 
@@ -32,51 +33,35 @@ public class AttendanceModal {
         this.employeeId = employeeId;
     }
 
-    public String getDate() throws ParseException {
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date d = sdf.parse(date);
-        sdf.applyPattern("dd/MM/yy");
-        return sdf.format(d);
+    public String getDate() {
+        return date;
     }
 
     public void setDate(String date) {
         this.date = date;
     }
 
-    public String getIntime() throws ParseException {
-        if (intime.isEmpty()) {
-            return "";
-        }
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat inputFormat = new SimpleDateFormat("HH:mm:ss");
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm a");
-        Date date = inputFormat.parse(intime);
-        return outputFormat.format(date);
+    public String getInTime() {
+        return inTime;
     }
 
-    public void setIntime(String intime) {
-        this.intime = intime;
+    public void setInTime(String inTime) {
+        this.inTime = inTime;
     }
 
-    public String getOuttime() throws ParseException {
-        if (outtime.isEmpty()) {
-            return "";
-        }
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat inputFormat = new SimpleDateFormat("HH:mm:ss");
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm a");
-        Date date = inputFormat.parse(outtime);
-        return outputFormat.format(date);
+    public String getOutTime() {
+        return outTime;
     }
 
-    public void setOuttime(String outtime) {
-        this.outtime = outtime;
+    public void setOutTime(String outTime) {
+        this.outTime = outTime;
     }
 
-    public double getHours(){return hours;}
+    public double getHours() {
+        return hours;
+    }
 
-    public void setHours(double hours){this.hours = hours;}
+    public void setHours(double hours) {
+        this.hours = hours;
+    }
 }

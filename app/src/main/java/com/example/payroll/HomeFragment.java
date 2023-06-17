@@ -120,18 +120,18 @@ public class HomeFragment extends Fragment implements AddAttendanceRVAdapter.but
                     String time = String.format("%02d:%02d:00", hourOfDay, minute1);
 
                     if (Objects.equals("In", type)) {
-                        if (dbHandler.addIntime(employeeId, date, time)) {
+                        if (dbHandler.addInTime(employeeId, date, time)) {
                             Toast.makeText(requireActivity().getApplicationContext(), "In Successfully Added", Toast.LENGTH_SHORT).show();
                             adapter.updateButtonState(employeeId, type, time);
                         } else {
                             Toast.makeText(requireActivity().getApplicationContext(), "In Time Already Exist", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        if (dbHandler.addOuttime(employeeId, date, time)) {
+                        if (dbHandler.addOutTime(employeeId, date, time)) {
                             Toast.makeText(requireActivity().getApplicationContext(), "Out Successfully Added", Toast.LENGTH_SHORT).show();
                             adapter.updateButtonState(employeeId, type, time);
                         } else {
-                            Toast.makeText(requireActivity().getApplicationContext(), "Out Time Already Exist", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireActivity().getApplicationContext(), "Can't Add Out Time Without Adding In Time", Toast.LENGTH_SHORT).show();
                         }
                     }
 

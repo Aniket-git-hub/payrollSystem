@@ -279,7 +279,7 @@
                 android:layout_height="wrap_content"
                 android:text="May 2023"
                 android:textSize="15sp"
-                android:background="#673AB7"
+                android:background="@color/purple"
                 android:textColor="@color/white"
                 android:id="@+id/changeMonthBtn"
                 android:layout_marginHorizontal="10dp"

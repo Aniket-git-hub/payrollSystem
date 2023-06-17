@@ -17,7 +17,6 @@ public class SettingsFragment extends Fragment {
         // require a empty public constructor
     }
 
-
     Button logoutBtn;
     
     @Override
@@ -25,12 +24,7 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         logoutBtn = view.findViewById(R.id.logoutBtn);
 
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity)getActivity()).logout();
-            }
-        });
+        logoutBtn.setOnClickListener(v -> ((MainActivity)getActivity()).logout());
 
         return view;
     }

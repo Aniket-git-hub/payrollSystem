@@ -262,9 +262,19 @@ public class EmployeeDetails extends AppCompatActivity {
                         String inTime = inTimeTextView.getText().toString().substring(8);
                         String outTime = outTimeTextView.getText().toString().substring(9);
 
-                        // Calling the addAttendance method to add or update the attendance record
-                        dbHandler.addAttendance(Integer.parseInt(employeeId), date, inTime, outTime);
-                        Toast.makeText(EmployeeDetails.this, "Successfully Added", Toast.LENGTH_SHORT).show();
+                        if(!date.isEmpty()) {
+                            String monthYearForDB = new SimpleDateFormat("yyyy-MM").format(calendar.getTime());
+                            // Calling the addAttendance method to add or update the attendance record
+                            String message = dbHandler.addAttendance(Integer.parseInt(employeeId), date, inTime, outTime);
+                            Toast.makeText(EmployeeDetails.this, message, Toast.LENGTH_SHORT).show();
+                            try {
+                                updateAttendanceTable(employeeAttendanceTable, dbHandler.getAttendanceForCurrentMonth(Integer.parseInt(employeeId), monthYearForDB));
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }else{
+                            Toast.makeText(this, "Please Select A Date", Toast.LENGTH_SHORT).show();
+                        }
                     }).setNegativeButton(android.R.string.cancel, null).show();
         });
 
@@ -326,6 +336,7 @@ public class EmployeeDetails extends AppCompatActivity {
                             throw new RuntimeException(e);
                         }
 
+
                     })
                     .setNegativeButton(android.R.string.cancel, null)
                     .show();
@@ -357,16 +368,15 @@ public class EmployeeDetails extends AppCompatActivity {
 
         try {
             updateAttendanceTable(
-                    employeeAttendanceTable,
-                    dbHandler.getAttendanceForCurrentMonth(
-                            Integer.parseInt(employeeId),
-                            currentMonth
-                    )
-            );
+                        employeeAttendanceTable,
+                        dbHandler.getAttendanceForCurrentMonth(
+                                Integer.parseInt(employeeId),
+                                currentMonth
+                        )
+                );
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -377,13 +387,24 @@ public class EmployeeDetails extends AppCompatActivity {
         updateAttendanceTable(employeeAttendanceTable, dbHandler.getAttendanceForCurrentMonth(employeeId, monthYear));
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateAttendanceTable(TableLayout tableLayout, List<AttendanceModal> attendanceList) throws ParseException {
         // Remove all rows except the first row (header row) from the table layout
         if (tableLayout.getChildCount() > 1) {
             tableLayout.removeViews(1, tableLayout.getChildCount() - 1);
         }
+
+        if(attendanceList.isEmpty()){
+            TextView noRecordsFound = new TextView(this);
+            noRecordsFound.setText("No records Found!");
+            noRecordsFound.setGravity(Gravity.CENTER);
+            noRecordsFound.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+            tableLayout.addView(noRecordsFound);
+        }
+
         for (int i = 0; i < attendanceList.size(); i++) {
             AttendanceModal attendance = attendanceList.get(i);
+
             TableRow row = new TableRow(this);
             row.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
             row.setWeightSum(9f);
@@ -399,25 +420,21 @@ public class EmployeeDetails extends AppCompatActivity {
             row.addView(serialNoTextView);
 
             TextView dateTextView = new TextView(this);
-            try {
-                dateTextView.setText(attendance.getDate());
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
+            dateTextView.setText(attendance.getDate());
             dateTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2f));
             dateTextView.setGravity(Gravity.CENTER);
             dateTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
             row.addView(dateTextView);
 
             TextView inTimeTextView = new TextView(this);
-            inTimeTextView.setText(attendance.getIntime());
+            inTimeTextView.setText(attendance.getInTime());
             inTimeTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2f));
             inTimeTextView.setGravity(Gravity.CENTER);
             inTimeTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
             row.addView(inTimeTextView);
 
             TextView outTimeTextView = new TextView(this);
-            outTimeTextView.setText(attendance.getOuttime());
+            outTimeTextView.setText(attendance.getOutTime());
             outTimeTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2f));
             outTimeTextView.setGravity(Gravity.CENTER);
             outTimeTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);

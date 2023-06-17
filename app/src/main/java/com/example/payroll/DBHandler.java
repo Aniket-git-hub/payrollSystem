@@ -12,7 +12,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EmptyStackException;
 import java.util.List;
+import java.util.Objects;
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "payroll";
@@ -153,7 +155,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public boolean addIntime(int employeeId, String date, String intime) {
+    public boolean addInTime(int employeeId, String date, String inTime) {
         // Check if a record for the given date already exists
         String query = "SELECT * FROM " + TABLE_ATTENDANCE +
                 " WHERE " + ID_COL + " = ?" +
@@ -168,7 +170,7 @@ public class DBHandler extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(ID_COL, employeeId);
             values.put(DATE_COL, date);
-            values.put(IN_TIME_COL, intime);
+            values.put(IN_TIME_COL, inTime);
             db.insert(TABLE_ATTENDANCE, null, values);
             db.close();
             return true;
@@ -178,21 +180,22 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
-    public boolean addOuttime(int employeeId, String date, String outtime) {
-        // Check if a record for the given date already exists and if the outtime field is empty
+    public boolean addOutTime(int employeeId, String date, String outTime) {
+        // Check if a record for the given date already exists and if the outTime field is empty
         String query = "SELECT * FROM " + TABLE_ATTENDANCE +
                 " WHERE " + ID_COL + " = ?" +
                 " AND " + DATE_COL + " = ?" +
-                " AND " + OUT_TIME_COL + " IS NULL";
+                " AND " + OUT_TIME_COL + " IS NULL" +
+                " AND " + IN_TIME_COL + " IS NOT NULL";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(employeeId), date});
         boolean canUpdate = cursor.moveToFirst();
         cursor.close();
 
-        // If the record exists and the outtime field is empty, update it
+        // If the record exists and the outTime field is empty, update it
         if (canUpdate) {
             ContentValues values = new ContentValues();
-            values.put(OUT_TIME_COL, outtime);
+            values.put(OUT_TIME_COL, outTime);
             db.update(TABLE_ATTENDANCE, values, ID_COL + " = ? AND " + DATE_COL + " = ?", new String[]{String.valueOf(employeeId), date});
             db.close();
             return true;
@@ -202,6 +205,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
+
     public List<AttendanceModal> getAttendanceForCurrentMonth(int employeeId, String currentMonthYear) {
         List<AttendanceModal> attendanceList = new ArrayList<>();
         String[] dateParts = currentMonthYear.split("-");
@@ -210,11 +214,15 @@ public class DBHandler extends SQLiteOpenHelper {
 
         // Create the query
         String query = "SELECT " + ID_COL + ", " + DATE_COL + ", " + IN_TIME_COL + ", " + OUT_TIME_COL + "," +
-                "CASE WHEN " + IN_TIME_COL + " = " + OUT_TIME_COL + " THEN 24 ELSE round((strftime('%s', CASE WHEN " + OUT_TIME_COL + " < " + IN_TIME_COL + " THEN datetime(" + DATE_COL + " || ' ' || " + OUT_TIME_COL + ", '+1 day') ELSE datetime(" + DATE_COL + " || ' ' || " + OUT_TIME_COL + ") END) - strftime('%s', datetime(" + DATE_COL + " || ' ' || " + IN_TIME_COL + "))) / 3600.0, 2) END AS hours " +
+                "CASE WHEN " + IN_TIME_COL + " = " + OUT_TIME_COL + " THEN 24 ELSE round((strftime('%s', CASE WHEN "
+                + OUT_TIME_COL + " < " + IN_TIME_COL + " THEN datetime(" + DATE_COL + " || ' ' || " + OUT_TIME_COL + ", '+1 day')" +
+                " ELSE datetime(" + DATE_COL + " || ' ' || " + OUT_TIME_COL + ") END) - " +
+                "strftime('%s', datetime(" + DATE_COL + " || ' ' || " + IN_TIME_COL + "))) / 3600.0, 2) END AS hours " +
                 " FROM " + TABLE_ATTENDANCE +
                 " WHERE " + ID_COL + " = ?" +
                 " AND strftime('%m', " + DATE_COL + ") = ?" +
-                " AND strftime('%Y', " + DATE_COL + ") = ?";
+                " AND strftime('%Y', " + DATE_COL + ") = ? " +
+                " ORDER BY " + DATE_COL +" DESC ";
 
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -225,18 +233,18 @@ public class DBHandler extends SQLiteOpenHelper {
             do {
                 AttendanceModal attendance = new AttendanceModal();
                 attendance.setEmployeeId(Integer.parseInt(cursor.getString(0)));
-                attendance.setDate(cursor.getString(1));
-                String intime = cursor.getString(2);
-                String outtime = cursor.getString(3);
-                if (intime == null || intime.isEmpty()) {
-                    attendance.setIntime("");
+                attendance.setDate(formatDate(cursor.getString(1)));
+                String inTime = cursor.getString(2);
+                String outTime = cursor.getString(3);
+                if (inTime == null || inTime.isEmpty()) {
+                    attendance.setInTime("-");
                 } else {
-                    attendance.setIntime(formatTime(intime));
+                    attendance.setInTime(formatTime(inTime));
                 }
-                if (outtime == null || outtime.isEmpty()) {
-                    attendance.setOuttime("");
+                if (outTime == null || outTime.isEmpty()) {
+                    attendance.setOutTime("-");
                 } else {
-                    attendance.setOuttime(formatTime(outtime));
+                    attendance.setOutTime(formatTime(outTime));
                 }
                 attendance.setHours(cursor.getDouble(4));
                 attendanceList.add(attendance);
@@ -248,6 +256,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return attendanceList;
     }
 
+    @SuppressLint("SimpleDateFormat")
     private String formatTime(String time) {
         SimpleDateFormat inputFormat = new SimpleDateFormat("HH:mm:ss");
         SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm a");
@@ -256,7 +265,19 @@ public class DBHandler extends SQLiteOpenHelper {
             return outputFormat.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
-            return "";
+            return "-";
+        }
+    }
+    @SuppressLint("SimpleDateFormat")
+    private String formatDate(String dateInput) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yy");
+        try {
+            Date date = inputFormat.parse(dateInput);
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "-";
         }
     }
 
@@ -277,8 +298,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 AttendanceModal attendance = new AttendanceModal();
                 attendance.setEmployeeId(Integer.parseInt(cursor.getString(0)));
                 attendance.setDate(cursor.getString(1));
-                attendance.setIntime(cursor.getString(2));
-                attendance.setOuttime(cursor.getString(3));
+                attendance.setInTime(cursor.getString(2));
+                attendance.setOutTime(cursor.getString(3));
                 attendanceList.add(attendance);
             } while (cursor.moveToNext());
         }
@@ -425,12 +446,24 @@ public class DBHandler extends SQLiteOpenHelper {
                 new String[] { String.valueOf(employeeId) });
         db.close();
     }
+    public String addAttendance(int employeeId, String date, String inTime, String outTime) {
+        // Check if employeeId and date are provided
+        if (employeeId == 0 || date == null || date.isEmpty()) {
+            return "Error: Employee ID and date must be provided";
+        }
 
-    public void addAttendance(int employeeId, String date, String intime, String outtime) {
+        // Trim leading and trailing white space from inTime and outTime
+        if (inTime != null) {
+            inTime = inTime.trim();
+        }
+        if (outTime != null) {
+            outTime = outTime.trim();
+        }
+
         // Check if there is already an attendance record for this employee and date
         Cursor cursor = getReadableDatabase().query(
                 TABLE_ATTENDANCE,
-                new String[] { ID_COL },
+                new String[] { ID_COL, IN_TIME_COL },
                 ID_COL + "=? AND " + DATE_COL + "=?",
                 new String[] { String.valueOf(employeeId), date },
                 null, null, null
@@ -439,11 +472,31 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(ID_COL, employeeId);
         values.put(DATE_COL, date);
-        if (!intime.isEmpty()) {
-            values.put(IN_TIME_COL, intime);
+
+        if (inTime != null && !inTime.isEmpty()) {
+            values.put(IN_TIME_COL, inTime);
+        } else if (outTime != null && !outTime.isEmpty()) {
+            // inTime is empty and outTime is not empty
+            if (cursor.moveToFirst()) {
+                // There is already an attendance record for this employee and date
+                String existingInTime = cursor.getString(1);
+                if (existingInTime == null || existingInTime.isEmpty()) {
+                    // The existing attendance record has an empty inTime value
+                    cursor.close();
+                    return "Error: No inTime value present for the given date";
+                } else {
+                    // The existing attendance record has a non-empty inTime value
+                    values.put(OUT_TIME_COL, outTime);
+                }
+            } else {
+                // There is no attendance record for this employee and date
+                cursor.close();
+                return "Error: No inTime value present for the given date";
+            }
         }
-        if (!outtime.isEmpty()) {
-            values.put(OUT_TIME_COL, outtime);
+
+        if (outTime != null && !outTime.isEmpty()) {
+            values.put(OUT_TIME_COL, outTime);
         }
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -465,6 +518,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         cursor.close();
         db.close();
+        return "Success";
     }
+
 
 }
